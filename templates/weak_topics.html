@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weak Topic Analysis - Smart Edu</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            color: #243047;
+        }
+
+        header {
+            background: #243b80;
+            color: white;
+            padding: 24px 7%;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        header p {
+            margin: 0;
+            color: #e0e8ff;
+            line-height: 1.6;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .intro, .info-card, .topic-card, .empty-state {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(30, 50, 90, 0.07);
+        }
+
+        .intro h2 {
+            margin-top: 0;
+            color: #243b80;
+        }
+
+        .intro p, .topic-card p, .empty-state p {
+            color: #647089;
+            line-height: 1.6;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .info-card {
+            margin-bottom: 0;
+            border-left: 5px solid #536dfe;
+        }
+
+        .info-card h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            color: #63708a;
+        }
+
+        .info-card p {
+            margin: 0;
+            font-size: 27px;
+            font-weight: bold;
+            color: #243b80;
+        }
+
+        .topic-card h3 {
+            margin: 0 0 12px;
+        }
+
+        .topic-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .needs-practice {
+            background: #fff0d5;
+            color: #8b5700;
+        }
+
+        .good-progress {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .progress-track {
+            height: 12px;
+            background: #e8edf6;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #536dfe;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .resource-heading {
+            margin-top: 26px;
+            color: #243b80;
+            font-size: 19px;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .resource-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border: 1px solid #e1e7f2;
+            border-radius: 12px;
+            padding: 17px;
+            background: #fbfcff;
+        }
+
+        .resource-card h4 {
+            color: #243b80;
+            margin: 0 0 12px;
+            line-height: 1.5;
+        }
+
+        .resource-card p {
+            margin: 7px 0;
+            font-size: 14px;
+        }
+
+        .resource-tag {
+            display: inline-block;
+            margin: 3px 4px 3px 0;
+            padding: 5px 8px;
+            border-radius: 6px;
+            background: #e9edff;
+            color: #3347a5;
+            font-size: 12px;
+        }
+
+        .start-learning-btn {
+            display: inline-block;
+            margin-top: auto;
+            padding: 11px 16px;
+            background: #243b80;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+
+        .start-learning-btn:hover {
+            background: #17295e;
+        }
+
+        .resource-note {
+            background: #f4f6ff;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        /* Bottom navigation buttons */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 28px 0 30px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 12px 19px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .retake-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .retake-btn:hover {
+            background: #15803d;
+        }
+
+        .history-btn {
+            background: #536dfe;
+            color: white;
+        }
+
+        .history-btn:hover {
+            background: #3347d9;
+        }
+
+        .dashboard-btn {
+            background: #243b80;
+            color: white;
+        }
+
+        .dashboard-btn:hover {
+            background: #17295e;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 22px;
+            }
+
+            header h1 {
+                font-size: 23px;
+            }
+
+            main {
+                padding: 0 14px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Weak Topic Analysis</h1>
+        <p>
+            Understand your quiz performance and find learning resources
+            for topics that need more practice.
+        </p>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>Your Personalized Learning Insights</h2>
+            <p>
+                Smart Edu analyzes your recorded quiz answers by topic.
+                Topics with accuracy below 60% are marked for practice,
+                and relevant resources are selected from your existing
+                learning-resource dataset.
+            </p>
+        </section>
+
+        <section class="summary">
+            <div class="info-card">
+                <h3>Topics Analyzed</h3>
+                <p>{{ topics_analyzed }}</p>
+            </div>
+
+            <div class="info-card">
+                <h3>Topics to Practice</h3>
+                <p>{{ weak_topics_count }}</p>
+            </div>
+
+            <div class="info-card">
+                <h3>Overall Accuracy</h3>
+                <p>{{ overall_accuracy }}%</p>
+            </div>
+        </section>
+
+        {% if not has_data %}
+            <section class="empty-state">
+                <h2>No Quiz Data Yet</h2>
+                <p>
+                    Complete a quiz first. Your topic analysis and
+                    resource recommendations will appear here.
+                </p>
+
+                <a href="{{ url_for('quiz') }}"
+                   class="action-btn retake-btn">
+                    Take a Quiz
+                </a>
+            </section>
+        {% else %}
+            <h2>Topic-by-Topic Performance</h2>
+
+            {% for topic in topics %}
+                <section class="topic-card">
+                    <div class="topic-heading">
+                        <h3>{{ topic.name }}</h3>
+
+                        {% if topic.needs_practice %}
+                            <span class="status needs-practice">
+                                Needs Practice
+                            </span>
+                        {% else %}
+                            <span class="status good-progress">
+                                Good Progress
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <p>
+                        Correct answers:
+                        <strong>{{ topic.correct }}</strong>
+                        out of
+                        <strong>{{ topic.total }}</strong>
+                    </p>
+
+                    <div class="progress-track">
+                        <div
+                            class="progress-fill"
+                            style="width: {{ topic.accuracy }}%;"
+                        ></div>
+                    </div>
+
+                    <p>
+                        <strong>{{ topic.accuracy }}% accuracy</strong>
+                    </p>
+
+                    {% if topic.needs_practice %}
+                        <h4 class="resource-heading">
+                            Recommended Learning Resources
+                        </h4>
+
+                        <p>
+                            Focus on this topic to strengthen your
+                            understanding before your next quiz.
+                        </p>
+
+                        {% if topic.resources %}
+                            <div class="resource-grid">
+                                {% for resource in topic.resources %}
+                                    <article class="resource-card">
+                                        <h4>{{ resource.title }}</h4>
+
+                                        <div>
+                                            <span class="resource-tag">
+                                                {{ resource.level }}
+                                            </span>
+
+                                            <span class="resource-tag">
+                                                {{ resource.type }}
+                                            </span>
+                                        </div>
+
+                                        <p>
+                                            <strong>Subject:</strong>
+                                            {{ resource.subject }}
+                                        </p>
+
+                                        <p>
+                                            <strong>Difficulty:</strong>
+                                            {{ resource.difficulty }}
+                                        </p>
+
+                                        <p>
+                                            <strong>Rating:</strong>
+                                            {{ resource.rating }}/5
+                                        </p>
+
+                                        <a
+                                            href="{{ url_for(
+                                                'learn',
+                                                resource_id=resource.resource_id
+                                            ) }}"
+                                            class="start-learning-btn"
+                                        >
+                                            Start Learning &rarr;
+                                        </a>
+                                    </article>
+                                {% endfor %}
+                            </div>
+
+                            {% if topic.resource_note %}
+                                <p class="resource-note">
+                                    {{ topic.resource_note }}
+                                </p>
+                            {% endif %}
+                        {% else %}
+                            <p class="resource-note">
+                                {{ topic.resource_note or
+                                "No matching resources were found. Add a
+                                relevant resource to your resource dataset." }}
+                            </p>
+                        {% endif %}
+
+                    {% else %}
+                        <p>
+                            Keep practising {{ topic.name }} to maintain
+                            and improve your performance.
+                        </p>
+                    {% endif %}
+
+                    <p>
+                        <small>
+                            Based on {{ topic.total }}
+                            recorded answer(s).
+                        </small>
+                    </p>
+                </section>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Retake Quiz, Quiz History and Dashboard navigation -->
+        <div class="action-buttons">
+            <a href="{{ url_for('quiz') }}"
+               class="action-btn retake-btn">
+                &#8635; Retake Quiz
+            </a>
+
+            <a href="{{ url_for('quiz_history') }}"
+               class="action-btn history-btn">
+                &#128202; View Quiz History
+            </a>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="action-btn dashboard-btn">
+                Back to Dashboard
+            </a>
+        </div>
+    </main>
+</body>
+</html>

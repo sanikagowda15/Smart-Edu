@@ -1,0 +1,17 @@
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+data/users.csv
+data/quiz_history.csv
+data/quiz_question_history.csv
+data/progress.csv
+data/ocr_history.csv
+
+data/uploaded_image.jpg
+data/*
+!data/resources.csv

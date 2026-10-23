@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>
+        {{ resource.title }} - Smart Edu
+    </title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f4e79;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 6px 0 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        .course-header {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+            margin-bottom: 22px;
+        }
+
+        .course-header h2 {
+            color: #1f4e79;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .detail {
+            background-color: #eef4f9;
+            padding: 10px 16px;
+            border-radius: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .section {
+            background-color: white;
+            padding: 28px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
+        }
+
+        .section h2 {
+            color: #1f4e79;
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+
+        ul {
+            padding-left: 25px;
+            margin-bottom: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .learning-section {
+            text-align: center;
+        }
+
+        .learning-section p {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .start-button {
+            display: inline-block;
+            background-color: #198754;
+            color: white;
+            padding: 14px 30px;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .start-button:hover {
+            background-color: #146c43;
+        }
+
+        .back-area {
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 40px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 11px 22px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-button:hover {
+            background-color: #565e64;
+        }
+
+        @media (max-width: 700px) {
+
+            .container {
+                width: 90%;
+            }
+
+            .course-header h2 {
+                font-size: 23px;
+            }
+
+            .details {
+                display: block;
+            }
+
+            .detail {
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        Smart Edu
+    </h1>
+
+    <p>
+        Educational Resource
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- COURSE HEADER -->
+
+    <div class="course-header">
+
+        <h2>
+            {{ resource.title }}
+        </h2>
+
+
+        <div class="details">
+
+            <div class="detail">
+                <strong>Subject:</strong>
+                {{ resource.subject }}
+            </div>
+
+
+            <div class="detail">
+                <strong>Level:</strong>
+                {{ resource.level }}
+            </div>
+
+
+            <div class="detail">
+                <strong>Type:</strong>
+                {{ resource.type }}
+            </div>
+
+
+            <div class="detail">
+                <strong>Difficulty:</strong>
+                {{ resource.difficulty }}
+            </div>
+
+
+            <div class="detail">
+                <strong>Rating:</strong>
+                ⭐ {{ resource.rating }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- WHAT YOU WILL LEARN -->
+
+    <div class="section">
+
+        <h2>
+            What You'll Learn
+        </h2>
+
+
+        <ul>
+
+            {% for topic in resource.topics %}
+
+            <li>
+                {{ topic }}
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+    <!-- LEARNING OBJECTIVES -->
+
+    <div class="section">
+
+        <h2>
+            Learning Objectives
+        </h2>
+
+
+        <ul>
+
+            {% for objective in resource.objectives %}
+
+            <li>
+                {{ objective }}
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+
+    <!-- START LEARNING -->
+
+    <div class="section learning-section">
+
+        <h2>
+            Ready to Learn?
+        </h2>
+
+
+        <p>
+
+            Click Start Learning to access
+            the recommended learning resources
+            for this course.
+
+        </p>
+
+
+        <a
+            class="start-button"
+            href="{{ url_for(
+                'learn',
+                resource_id=resource.resource_id
+            ) }}"
+        >
+
+            ▶ Start Learning
+
+        </a>
+
+    </div>
+
+
+    <!-- BACK BUTTON -->
+
+    <div class="back-area">
+
+        <a
+            class="back-button"
+            href="{{ url_for('resources') }}"
+        >
+
+            ← Back to Resources
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

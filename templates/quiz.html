@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Edu - Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px 16px;
+            background: #f4f7fb;
+            color: #243247;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            background: #243b64;
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+        }
+
+        .quiz-header h1 {
+            margin-top: 0;
+        }
+
+        .question-card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border: 1px solid #e0e6ef;
+        }
+
+        .question-card h3 {
+            margin-top: 0;
+        }
+
+        .option {
+            display: block;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #e0e6ef;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background: #f0f5ff;
+        }
+
+        .submit-btn, .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 7px;
+            background: #243b64;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .result {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            margin-top: 22px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+
+        <div class="quiz-header">
+            <h1>Smart Edu Quiz</h1>
+            <p>Test your knowledge and check your learning progress.</p>
+            <p>5 questions · 1 mark each</p>
+        </div>
+
+        {% if score is not none %}
+        <div class="result">
+            <h2>Your Score: {{ score }} / {{ questions|length }}</h2>
+            <p>
+                {% if score == questions|length %}
+                    Excellent! You answered every question correctly.
+                {% elif score >= 3 %}
+                    Good work! Keep practising to improve.
+                {% else %}
+                    Keep learning and try the quiz again.
+                {% endif %}
+            </p>
+            <a class="back-btn" href="/quiz">Try Again</a>
+        </div>
+        {% else %}
+        <form method="POST" action="/quiz">
+
+            {% for question in questions %}
+            {% set question_index = loop.index0 %}
+            <div class="question-card">
+                <h3>{{ loop.index }}. {{ question.question }}</h3>
+
+                {% for option in question.options %}
+                <label class="option">
+                    <input
+                        type="radio"
+                        name="question_{{ question_index }}"
+                        value="{{ option }}"
+                        required
+                    >
+                    {{ option }}
+                </label>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button class="submit-btn" type="submit">
+                Submit Quiz
+            </button>
+
+        </form>
+        {% endif %}
+
+        <div class="back-link">
+            <a href="/dashboard">← Back to Dashboard</a>
+        </div>
+
+    </div>
+</body>
+</html>

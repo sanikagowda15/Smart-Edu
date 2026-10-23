@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Edu - Computer Vision</title>
+
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f6f8;
+
+            margin: 0;
+
+            padding: 0;
+        }
+
+
+        header {
+
+            background: #1f2937;
+
+            color: white;
+
+            padding: 20px;
+
+            text-align: center;
+        }
+
+
+        .container {
+
+            width: 85%;
+
+            max-width: 1000px;
+
+            margin: 30px auto;
+        }
+
+
+        .card {
+
+            background: white;
+
+            padding: 25px;
+
+            margin-bottom: 20px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 10px
+                rgba(0, 0, 0, 0.08);
+        }
+
+
+        h2,
+        h3 {
+
+            color: #1f2937;
+        }
+
+
+        input[type="file"] {
+
+            margin: 15px 0;
+        }
+
+
+        button {
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+
+        button:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .info {
+
+            background: #f3f4f6;
+
+            padding: 15px;
+
+            border-radius: 8px;
+        }
+
+
+        .ocr {
+
+            background: #f9fafb;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            white-space: pre-wrap;
+
+            line-height: 1.6;
+        }
+
+
+        .message {
+
+            background: #fff7ed;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            color: #9a3412;
+        }
+
+
+        /* =====================================================
+           AI ANSWER
+        ===================================================== */
+
+        .ai-result {
+
+            border-left:
+                5px solid #2563eb;
+        }
+
+
+        .ai-header {
+
+            margin-bottom: 20px;
+        }
+
+
+        .question-type {
+
+            display: inline-block;
+
+            background: #e0e7ff;
+
+            color: #3730a3;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .answer-section {
+
+            margin-top: 20px;
+
+            padding: 18px;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+        }
+
+
+        .answer-section h3 {
+
+            margin-top: 0;
+
+            margin-bottom: 12px;
+        }
+
+
+        .answer-content {
+
+            white-space: pre-wrap;
+
+            line-height: 1.7;
+        }
+
+
+        .answer-section pre {
+
+            background: #111827;
+
+            color: #f9fafb;
+
+            padding: 18px;
+
+            border-radius: 8px;
+
+            overflow-x: auto;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+        }
+
+
+        .answer-section code {
+
+            font-family: Consolas, monospace;
+        }
+
+
+        .takeaway {
+
+            margin-top: 20px;
+
+            padding: 18px;
+
+            background: #fff7ed;
+
+            border-radius: 10px;
+
+            border-left:
+                4px solid #f59e0b;
+        }
+
+
+        .takeaway p {
+
+            margin-bottom: 0;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           ONE RECOMMENDATION LINK
+        ===================================================== */
+
+        .recommendation-link {
+
+            display: block;
+
+            margin-top: 20px;
+
+            padding: 18px;
+
+            background: #f5f3ff;
+
+            color: #2563eb;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            border-left:
+                5px solid #7c3aed;
+
+            font-weight: bold;
+
+            transition:
+                all 0.2s ease;
+        }
+
+
+        .recommendation-link:hover {
+
+            transform:
+                translateY(-2px);
+
+            background: #ede9fe;
+
+            box-shadow:
+                0 5px 15px
+                rgba(0, 0, 0, 0.12);
+        }
+
+
+        .recommendation-title {
+
+            font-size: 18px;
+
+            color: #1f2937;
+
+            margin-bottom: 8px;
+        }
+
+
+        .recommendation-subtitle {
+
+            font-size: 14px;
+
+            color: #4b5563;
+
+            font-weight: normal;
+        }
+
+
+        .open-resource {
+
+            margin-top: 12px;
+
+            font-size: 14px;
+
+            color: #2563eb;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .container {
+
+                width: 92%;
+            }
+
+
+            .grid {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>🎓 Smart Edu</h1>
+
+    <p>
+        Computer Vision & AI Educational Assistant
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- =====================================================
+         IMAGE UPLOAD
+    ===================================================== -->
+
+    <div class="card">
+
+        <h2>
+            📷 Educational Image Analyzer
+        </h2>
+
+
+        <p>
+
+            Upload an image containing a
+            question.
+
+            Smart Edu will extract the
+            question using OCR and generate
+            an AI-based answer.
+
+        </p>
+
+
+        <form
+            action="{{ url_for('vision') }}"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <input
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+            >
+
+
+            <br>
+
+
+            <button type="submit">
+
+                🔍 Analyze Image
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         MESSAGE
+    ===================================================== -->
+
+    {% if message %}
+
+    <div class="card">
+
+        <div class="message">
+
+            {{ message }}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         IMAGE ANALYSIS
+    ===================================================== -->
+
+    {% if result %}
+
+    <div class="card">
+
+        <h2>
+            📊 Image Analysis
+        </h2>
+
+
+        <div class="grid">
+
+
+            <div class="info">
+
+                <strong>
+                    Width
+                </strong>
+
+                <br>
+
+                {{ result.width }} px
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Height
+                </strong>
+
+                <br>
+
+                {{ result.height }} px
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Channels
+                </strong>
+
+                <br>
+
+                {{ result.channels }}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Brightness
+                </strong>
+
+                <br>
+
+                {{ result.average_brightness }}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETECTED TOPIC
+    ===================================================== -->
+
+    <div class="card">
+
+        <h2>
+            🎯 Detected Topic
+        </h2>
+
+
+        <p>
+
+            <strong>
+
+                {{ result.detected_topic }}
+
+            </strong>
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         OCR TEXT
+    ===================================================== -->
+
+    <div class="card">
+
+        <h2>
+            📝 Extracted Question
+        </h2>
+
+
+        <div class="ocr">
+
+            {{ result.extracted_text }}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         AI ANSWER
+    ===================================================== -->
+
+    {% if answer %}
+
+    <div class="card ai-result">
+
+
+        <div class="ai-header">
+
+            <h2>
+                💡 Smart Edu AI Answer
+            </h2>
+
+
+            <span class="question-type">
+
+                {{ answer.question_type }}
+
+            </span>
+
+        </div>
+
+
+        <!-- ANSWER -->
+
+        {% if answer.answer %}
+
+        <div class="answer-section">
+
+            <h3>
+                🎯 Answer
+            </h3>
+
+
+            <div class="answer-content">
+
+                {{ answer.answer }}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- EXPLANATION -->
+
+        {% if answer.explanation %}
+
+        <div class="answer-section">
+
+            <h3>
+                🧠 Explanation
+            </h3>
+
+
+            <div class="answer-content">
+
+                {{ answer.explanation }}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- CODE -->
+
+        {% if answer.code %}
+
+        <div class="answer-section">
+
+            <h3>
+                💻 Solution Code
+            </h3>
+
+
+            <pre><code>{{ answer.code }}</code></pre>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- EXAMPLE -->
+
+        {% if answer.example %}
+
+        <div class="answer-section">
+
+            <h3>
+                🧪 Example
+            </h3>
+
+
+            <div class="answer-content">
+
+                {{ answer.example }}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- KEY TAKEAWAY -->
+
+        {% if answer.key_takeaway %}
+
+        <div class="takeaway">
+
+            <strong>
+                📌 Key Takeaway
+            </strong>
+
+
+            <p>
+
+                {{ answer.key_takeaway }}
+
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         ONE RECOMMENDED RESOURCE
+    ===================================================== -->
+
+    {% if recommendations %}
+
+    <div class="card">
+
+        <h2>
+            🎯 Recommended Learning Resource
+        </h2>
+
+
+        <p>
+
+            Based on the detected topic:
+
+            <strong>
+
+                {{ result.detected_topic }}
+
+            </strong>
+
+        </p>
+
+
+        {% for resource in recommendations %}
+
+            {% if resource.url %}
+
+            <a
+                href="{{ resource.url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="recommendation-link"
+            >
+
+                <div class="recommendation-title">
+
+                    📚 Learn
+                    {{ result.detected_topic }}
+
+                </div>
+
+
+                <div class="recommendation-subtitle">
+
+                    {{ resource.title }}
+
+                </div>
+
+
+                <div class="open-resource">
+
+                    🚀 Open Learning Resource →
+
+                </div>
+
+            </a>
+
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

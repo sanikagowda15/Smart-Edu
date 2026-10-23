@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Resources - Smart Edu</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f7fb;
+        }
+
+        header {
+            background-color: #1f4e79;
+            color: white;
+            padding: 18px 30px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #163a5c;
+            padding: 12px 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        h2 {
+            color: #1f4e79;
+        }
+
+        .table-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow:
+                0 3px 10px
+                rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #1f4e79;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f8fc;
+        }
+
+        .resource-link {
+            color: #1f4e79;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        Smart Educational Resource Platform
+    </h1>
+
+</header>
+
+
+<nav>
+
+    <a href="/">
+        Home
+    </a>
+
+    <a href="/resources">
+        Resources
+    </a>
+
+    <a href="/recommendations">
+        Recommendations
+    </a>
+
+</nav>
+
+
+<div class="container">
+
+    <h2>
+        Educational Resources
+    </h2>
+
+
+    <div class="table-container">
+
+        {% if resources %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Title
+                    </th>
+
+                    <th>
+                        Subject
+                    </th>
+
+                    <th>
+                        Level
+                    </th>
+
+                    <th>
+                        Type
+                    </th>
+
+                    <th>
+                        Difficulty
+                    </th>
+
+                    <th>
+                        Rating
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for resource in resources %}
+
+                <tr>
+
+                    <td>
+
+                        <a
+                            class="resource-link"
+                            href="{{ url_for(
+                                'resource_details',
+                                resource_id=resource.resource_id
+                            ) }}"
+                        >
+                            {{ resource.title }}
+                        </a>
+
+                    </td>
+
+                    <td>
+                        {{ resource.subject }}
+                    </td>
+
+                    <td>
+                        {{ resource.level }}
+                    </td>
+
+                    <td>
+                        {{ resource.type }}
+                    </td>
+
+                    <td>
+                        {{ resource.difficulty }}
+                    </td>
+
+                    <td>
+                        {{ resource.rating }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty">
+            No educational resources available.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

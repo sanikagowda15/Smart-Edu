@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Learning Progress - Smart Edu</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f4e79;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1f4e79;
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: white;
+            width: 200px;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #1f4e79;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .progress-box {
+            background-color: white;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 25px;
+            background-color: #ddd;
+            border-radius: 15px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: {{ average_progress }}%;
+            background-color: #1f4e79;
+        }
+
+        footer {
+            margin-top: 40px;
+            background-color: #1f4e79;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Smart Edu - Learning Progress</h1>
+</header>
+
+<div class="container">
+
+    <h2>Student Learning Progress</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Resources</h3>
+            <div class="number">{{ total_resources }}</div>
+        </div>
+
+        <div class="card">
+            <h3>Completed</h3>
+            <div class="number">{{ completed }}</div>
+        </div>
+
+        <div class="card">
+            <h3>In Progress</h3>
+            <div class="number">{{ in_progress }}</div>
+        </div>
+
+        <div class="card">
+            <h3>Not Started</h3>
+            <div class="number">{{ not_started }}</div>
+        </div>
+
+    </div>
+
+    <div class="progress-box">
+
+        <h3>Average Learning Progress</h3>
+
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <p>
+            <strong>{{ average_progress }}%</strong> overall progress
+        </p>
+
+    </div>
+
+</div>
+
+<footer>
+    <p>Smart Edu | Smart Learning for Quality Education</p>
+</footer>
+
+</body>
+</html>

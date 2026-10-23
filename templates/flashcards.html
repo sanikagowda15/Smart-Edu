@@ -1,0 +1,476 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Flashcard Generator | Smart Edu</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fc;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 35px auto;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .intro h1 {
+            color: #172554;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .panel {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 22px rgba(15, 23, 42, 0.07);
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 18px 0 8px;
+        }
+
+        textarea,
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font: inherit;
+            background: white;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 7px;
+            line-height: 1.5;
+        }
+
+        button,
+        .button-link {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .generate-btn {
+            margin-top: 22px;
+            background: #2563eb;
+            color: white;
+            width: 100%;
+        }
+
+        .generate-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: #fff7ed;
+            color: #9a3412;
+            line-height: 1.5;
+        }
+
+        .topic {
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .flashcard {
+            display: none;
+            min-height: 270px;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #dbeafe;
+            background: linear-gradient(135deg, #ffffff, #eff6ff);
+            text-align: center;
+        }
+
+        .flashcard.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-label {
+            color: #2563eb;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .question {
+            font-size: 23px;
+            line-height: 1.5;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .answer {
+            display: none;
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid #cbd5e1;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .answer.visible {
+            display: block;
+        }
+
+        .answer strong {
+            color: #15803d;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .reveal-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .secondary-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        #counter {
+            color: #475569;
+            font-size: 14px;
+            min-width: 95px;
+            text-align: center;
+        }
+
+        .tip {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            .container {
+                width: 94%;
+                margin-top: 22px;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+
+            .question {
+                font-size: 19px;
+            }
+
+            .flashcard {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h2>🎓 Smart Edu</h2>
+
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('resources') }}">Resources</a>
+            <a href="{{ url_for('quiz') }}">Quiz</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h1>AI Flashcard Generator</h1>
+            <p>
+                Turn your study notes or an image of your notes into
+                question-and-answer flashcards using AI.
+            </p>
+        </section>
+
+        <section class="panel">
+            <h2>Generate Your Flashcards</h2>
+            <p class="hint">
+                Enter your notes, upload an image containing readable text,
+                or provide both. The AI will create flashcards for revision.
+            </p>
+
+            {% if message %}
+                <div class="message" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+
+            <form method="POST"
+                  action="{{ url_for('flashcards') }}"
+                  enctype="multipart/form-data">
+
+                <label for="notes">Study Notes</label>
+                <textarea
+                    id="notes"
+                    name="notes"
+                    maxlength="30000"
+                    placeholder="Paste your study notes here..."></textarea>
+
+                <p class="hint">
+                    You can paste definitions, concepts, textbook notes,
+                    or important exam points.
+                </p>
+
+                <label for="image">Upload Notes Image (Optional)</label>
+                <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*">
+
+                <p class="hint">
+                    Supported image formats depend on your browser and
+                    installed OCR setup. Clear, readable images work best.
+                </p>
+
+                <label for="count">Number of Flashcards</label>
+                <select id="count" name="count">
+                    <option value="5">5 Flashcards</option>
+                    <option value="10" selected>10 Flashcards</option>
+                    <option value="15">15 Flashcards</option>
+                    <option value="20">20 Flashcards</option>
+                </select>
+
+                <button class="generate-btn" type="submit">
+                    ✨ Generate Flashcards with AI
+                </button>
+            </form>
+        </section>
+
+        {% if flashcard_data and flashcard_data.success %}
+            <section class="panel" id="results">
+                <h2>Your Flashcards</h2>
+
+                <p class="topic">
+                    Topic: {{ flashcard_data.topic }}
+                </p>
+
+                <div id="flashcard-list">
+                    {% for card in flashcard_data.flashcards %}
+                        <article class="flashcard {% if loop.first %}active{% endif %}">
+                            <div class="card-label">
+                                Question {{ loop.index }}
+                            </div>
+
+                            <div class="question">
+                                {{ card.question }}
+                            </div>
+
+                            <div class="answer">
+                                <strong>Answer</strong>
+                                <span>{{ card.answer }}</span>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <div class="controls">
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="previous-btn"
+                        onclick="changeCard(-1)">
+                        ← Previous
+                    </button>
+
+                    <span id="counter" aria-live="polite">
+                        Card 1 of {{ flashcard_data.flashcards|length }}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="next-btn"
+                        onclick="changeCard(1)">
+                        Next →
+                    </button>
+                </div>
+
+                <div class="controls">
+                    <button
+                        type="button"
+                        class="reveal-btn"
+                        id="reveal-btn"
+                        onclick="toggleAnswer()">
+                        Show Answer
+                    </button>
+                </div>
+
+                <p class="tip">
+                    Try answering the question yourself before revealing
+                    the answer. Use Previous and Next to revise each card.
+                </p>
+            </section>
+        {% endif %}
+    </main>
+
+    <footer>
+        Smart Edu | Smart Learning for Quality Education
+    </footer>
+
+    <script>
+        const cards = Array.from(
+            document.querySelectorAll(".flashcard")
+        );
+
+        let currentCard = 0;
+
+        function displayCard() {
+            if (cards.length === 0) {
+                return;
+            }
+
+            cards.forEach((card, index) => {
+                card.classList.toggle("active", index === currentCard);
+
+                const answer = card.querySelector(".answer");
+                answer.classList.remove("visible");
+            });
+
+            document.getElementById("counter").textContent =
+                `Card ${currentCard + 1} of ${cards.length}`;
+
+            document.getElementById("previous-btn").disabled =
+                currentCard === 0;
+
+            document.getElementById("next-btn").disabled =
+                currentCard === cards.length - 1;
+
+            document.getElementById("reveal-btn").textContent =
+                "Show Answer";
+        }
+
+        function changeCard(direction) {
+            const nextIndex = currentCard + direction;
+
+            if (nextIndex >= 0 && nextIndex < cards.length) {
+                currentCard = nextIndex;
+                displayCard();
+            }
+        }
+
+        function toggleAnswer() {
+            if (cards.length === 0) {
+                return;
+            }
+
+            const answer = cards[currentCard].querySelector(".answer");
+            const button = document.getElementById("reveal-btn");
+            const isVisible = answer.classList.toggle("visible");
+
+            button.textContent = isVisible
+                ? "Hide Answer"
+                : "Show Answer";
+        }
+
+        displayCard();
+    </script>
+</body>
+</html>

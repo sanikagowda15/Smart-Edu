@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz History - Smart Edu</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1e293b;
+        }
+
+        header {
+            background: #163b70;
+            color: white;
+            padding: 22px 7%;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header p {
+            margin-bottom: 0;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        .card p {
+            color: #64748b;
+            margin: 0 0 10px;
+        }
+
+        .card h2 {
+            color: #163b70;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px #0000000d;
+            overflow-x: auto;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            color: #163b70;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            min-width: 500px;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #edf3fb;
+        }
+
+        .score {
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .links {
+            margin: 22px 0;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            background: #163b70;
+            color: white;
+            text-decoration: none;
+            padding: 11px 16px;
+            border-radius: 7px;
+        }
+
+        .links a:hover {
+            background: #24549a;
+        }
+
+        .empty {
+            color: #64748b;
+            padding: 18px 0;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px 5%;
+            }
+
+            main {
+                margin-top: 20px;
+                padding: 0 12px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+
+            .chart-container {
+                height: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Quiz Performance History</h1>
+        <p>Track your learning progress, {{ user_name }}.</p>
+    </header>
+
+    <main>
+        <div class="cards">
+            <div class="card">
+                <p>Total Attempts</p>
+                <h2>{{ total_attempts }}</h2>
+            </div>
+
+            <div class="card">
+                <p>Latest Score</p>
+                <h2>{{ latest_score }}</h2>
+            </div>
+
+            <div class="card">
+                <p>Average Performance</p>
+                <h2>{{ average_percentage }}%</h2>
+            </div>
+        </div>
+
+        <section class="panel">
+            <h2>Quiz Performance Graph</h2>
+            <p>Compare your scores across previous quiz attempts.</p>
+
+            {% if history %}
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+            {% else %}
+            <p class="empty">
+                Your performance graph will appear after you complete your first quiz.
+            </p>
+            {% endif %}
+        </section>
+
+        <section class="panel">
+            <h2>Previous Quiz Attempts</h2>
+
+            {% if history %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Attempt</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Date &amp; Time</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for attempt in history %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="score">
+                            {{ attempt.score }}/{{ attempt.total_questions }}
+                        </td>
+                        <td>{{ attempt.percentage }}%</td>
+                        <td>{{ attempt.attempted_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty">
+                No quiz attempts yet. Take your first quiz to see your results here!
+            </p>
+            {% endif %}
+        </section>
+
+        <div class="links">
+            <a href="{{ url_for('quiz') }}">Take Quiz</a>
+            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        </div>
+    </main>
+
+    {% if history %}
+    <script>
+        const attemptLabels = {{ history | reverse | list
+            | map(attribute='attempted_at') | list | tojson }};
+
+        const scores = {{ history | reverse | list
+            | map(attribute='score') | list | tojson }};
+
+        const totals = {{ history | reverse | list
+            | map(attribute='total_questions') | list | tojson }};
+
+        const percentages = {{ history | reverse | list
+            | map(attribute='percentage') | list | tojson }};
+
+        const chartCanvas = document.getElementById('performanceChart');
+
+        new Chart(chartCanvas, {
+            type: 'line',
+
+            data: {
+                labels: attemptLabels.map((date, index) =>
+                    'Attempt ' + (index + 1)
+                ),
+
+                datasets: [
+                    {
+                        label: 'Quiz Score',
+                        data: scores,
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.12)',
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: true,
+                        tension: 0.3
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+
+                plugins: {
+                    legend: {
+                        display: true
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const i = context.dataIndex;
+                                return 'Score: ' + scores[i] + '/' +
+                                    totals[i] + ' (' + percentages[i] + '%)';
+                            },
+
+                            afterLabel: function(context) {
+                                return 'Date: ' + attemptLabels[context.dataIndex];
+                            }
+                        }
+                    }
+                },
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: Math.max(5, ...totals),
+                        ticks: {
+                            stepSize: 1
+                        },
+                        title: {
+                            display: true,
+                            text: 'Score'
+                        }
+                    },
+
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Quiz Attempts (Oldest to Newest)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

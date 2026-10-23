@@ -1,0 +1,21 @@
+resource_id,title,subject,level,type,difficulty,rating
+1,Python Programming Basics,Python,Beginner,Course,Easy,4.5
+2,Python Functions and Modules,Python,Beginner,Video,Easy,4.4
+3,Advanced Python Programming,Python,Advanced,Course,Hard,4.7
+4,Introduction to Machine Learning,Machine Learning,Beginner,Course,Easy,4.6
+5,Machine Learning Algorithms,Machine Learning,Intermediate,Course,Medium,4.7
+6,Machine Learning with Scikit Learn,Machine Learning,Intermediate,Tutorial,Medium,4.5
+7,Deep Learning Fundamentals,Deep Learning,Advanced,Course,Hard,4.8
+8,Neural Networks Explained,Deep Learning,Intermediate,Video,Medium,4.6
+9,Introduction to Data Analytics,Data Analytics,Beginner,Course,Easy,4.5
+10,Pandas for Data Analysis,Data Analytics,Beginner,Tutorial,Easy,4.6
+11,Data Visualization with Matplotlib,Data Analytics,Intermediate,Tutorial,Medium,4.4
+12,Statistics for Data Science,Data Science,Beginner,Course,Easy,4.5
+13,Computer Vision Fundamentals,Computer Vision,Beginner,Course,Easy,4.6
+14,OpenCV Image Processing,Computer Vision,Intermediate,Tutorial,Medium,4.5
+15,Object Detection with OpenCV,Computer Vision,Advanced,Project,Hard,4.7
+16,Artificial Intelligence Fundamentals,Artificial Intelligence,Beginner,Course,Easy,4.6
+17,AI Problem Solving Techniques,Artificial Intelligence,Intermediate,Course,Medium,4.5
+18,Natural Language Processing Basics,NLP,Beginner,Course,Easy,4.6
+19,SQL Database Fundamentals,Database,Beginner,Tutorial,Easy,4.4
+20,Web Development with Flask,Web Development,Intermediate,Course,Medium,4.5

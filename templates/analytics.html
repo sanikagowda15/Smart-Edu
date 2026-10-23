@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics - Smart Edu</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background-color: #1f4e79;
+            color: white;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1f4e79;
+            margin-bottom: 30px;
+        }
+
+        .summary {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            width: 220px;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #1f4e79;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h3 {
+            color: #1f4e79;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #1f4e79;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #1f4e79;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>Smart Edu</h1>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/recommendations">Recommendations</a>
+            <a href="/analytics">Analytics</a>
+        </nav>
+
+    </header>
+
+
+    <div class="container">
+
+        <h2>Learning Resource Analytics Dashboard</h2>
+
+
+        <div class="summary">
+
+            <div class="card">
+                <h3>Total Resources</h3>
+                <p>{{ total_resources }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Average Rating</h3>
+                <p>{{ average_rating }}</p>
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h3>Resources by Subject</h3>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Number of Resources</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for subject, count in subject_counts.items() %}
+
+                    <tr>
+                        <td>{{ subject }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="section">
+
+            <h3>Resources by Learning Level</h3>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Number of Resources</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for level, count in level_counts.items() %}
+
+                    <tr>
+                        <td>{{ level }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="section">
+
+            <h3>Resources by Type</h3>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Resource Type</th>
+                        <th>Number of Resources</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for resource_type, count in type_counts.items() %}
+
+                    <tr>
+                        <td>{{ resource_type }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>Smart Edu | Smart Learning for Quality Education</p>
+
+    </footer>
+
+</body>
+
+</html>

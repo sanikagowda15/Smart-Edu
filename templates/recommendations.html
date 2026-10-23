@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Recommendations - Smart Edu</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background-color: #1f4e79;
+            color: white;
+            padding: 20px 60px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 90%;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1f4e79;
+            margin-bottom: 30px;
+        }
+
+        .form-box,
+        .results {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 25px;
+
+            width: 100%;
+            padding: 13px;
+
+            background-color: #1f4e79;
+            color: white;
+
+            border: none;
+            border-radius: 6px;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #163a5c;
+        }
+
+        .results h3 {
+            color: #1f4e79;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th {
+            background-color: #1f4e79;
+            color: white;
+
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f8fc;
+        }
+
+        td a {
+            color: #1f4e79;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        .similarity {
+            font-weight: bold;
+            color: #1f4e79;
+        }
+
+        .reason {
+            color: #555;
+        }
+
+        footer {
+            text-align: center;
+
+            margin-top: 50px;
+            padding: 20px;
+
+            background-color: #1f4e79;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>Smart Edu</h1>
+
+    <nav>
+
+        <a href="/">Home</a>
+
+        <a href="/resources">
+            Resources
+        </a>
+
+        <a href="/recommendations">
+            Recommendations
+        </a>
+
+    </nav>
+
+</header>
+
+
+
+<div class="container">
+
+
+    <h2>
+        Smart Learning Resource Recommendation
+    </h2>
+
+
+    <div class="form-box">
+
+
+        <form method="POST">
+
+
+            <label for="subject">
+                Select Subject
+            </label>
+
+
+            <select
+                name="subject"
+                id="subject"
+                required
+            >
+
+                <option value="">
+                    -- Select Subject --
+                </option>
+
+                <option value="Python">
+                    Python
+                </option>
+
+                <option value="Machine Learning">
+                    Machine Learning
+                </option>
+
+                <option value="Deep Learning">
+                    Deep Learning
+                </option>
+
+                <option value="Data Analytics">
+                    Data Analytics
+                </option>
+
+                <option value="Data Science">
+                    Data Science
+                </option>
+
+                <option value="Computer Vision">
+                    Computer Vision
+                </option>
+
+                <option value="Artificial Intelligence">
+                    Artificial Intelligence
+                </option>
+
+                <option value="NLP">
+                    NLP
+                </option>
+
+                <option value="Database">
+                    Database
+                </option>
+
+                <option value="Web Development">
+                    Web Development
+                </option>
+
+            </select>
+
+
+
+            <label for="level">
+                Select Level
+            </label>
+
+
+            <select
+                name="level"
+                id="level"
+                required
+            >
+
+                <option value="">
+                    -- Select Level --
+                </option>
+
+                <option value="Beginner">
+                    Beginner
+                </option>
+
+                <option value="Intermediate">
+                    Intermediate
+                </option>
+
+                <option value="Advanced">
+                    Advanced
+                </option>
+
+            </select>
+
+
+
+            <label for="resource_type">
+                Select Resource Type
+            </label>
+
+
+            <select
+                name="resource_type"
+                id="resource_type"
+                required
+            >
+
+                <option value="">
+                    -- Select Type --
+                </option>
+
+                <option value="Course">
+                    Course
+                </option>
+
+                <option value="Video">
+                    Video
+                </option>
+
+                <option value="Tutorial">
+                    Tutorial
+                </option>
+
+                <option value="Project">
+                    Project
+                </option>
+
+            </select>
+
+
+
+            <button type="submit">
+                Get Recommendations
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+
+    {% if recommendations %}
+
+
+    <div class="results">
+
+
+        <h3>
+            Recommended Learning Resources
+        </h3>
+
+
+        <div class="table-container">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Title
+                        </th>
+
+                        <th>
+                            Subject
+                        </th>
+
+                        <th>
+                            Level
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Difficulty
+                        </th>
+
+                        <th>
+                            Rating
+                        </th>
+
+                        <th>
+                            Similarity
+                        </th>
+
+                        <th>
+                            Why Recommended
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for resource in recommendations %}
+
+
+                    <tr>
+
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'resource_details',
+                                    resource_id=resource.resource_id
+                                ) }}"
+                            >
+
+                                {{ resource.title }}
+
+                            </a>
+
+                        </td>
+
+
+                        <td>
+                            {{ resource.subject }}
+                        </td>
+
+
+                        <td>
+                            {{ resource.level }}
+                        </td>
+
+
+                        <td>
+                            {{ resource.type }}
+                        </td>
+
+
+                        <td>
+                            {{ resource.difficulty }}
+                        </td>
+
+
+                        <td>
+                            {{ resource.rating }}
+                        </td>
+
+
+                        <td class="similarity">
+
+                            {{ "%.2f"|format(
+                                resource.similarity
+                            ) }}
+
+                        </td>
+
+
+                        <td class="reason">
+
+                            {{ resource.reason }}
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+
+<footer>
+
+    <p>
+        Smart Edu |
+        Smart Learning for Quality Education
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
